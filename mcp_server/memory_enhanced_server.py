@@ -74,7 +74,7 @@ mcp = FastMCP(
     'Enhanced Graphiti Agent Memory',
     instructions=MEMORY_MCP_INSTRUCTIONS,
     host="0.0.0.0",
-    port=8001,  # Different port from base server
+    port=8000,  # Use same port as base server
 )
 
 

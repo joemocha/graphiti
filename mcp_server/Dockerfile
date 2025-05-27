@@ -16,6 +16,8 @@ RUN uv sync
 
 # Copy application code
 COPY graphiti_mcp_server.py .
+COPY memory_enhanced_server.py .
+COPY memory_entity_types.py .
 
 EXPOSE 8000
 
@@ -23,4 +25,4 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1
 
 # Command to run the application
-CMD ["uv", "run", "graphiti_mcp_server.py"]
+CMD ["uv", "run", "memory_enhanced_server.py"]
