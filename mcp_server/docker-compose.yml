@@ -34,11 +34,18 @@ services:
       - NEO4J_USER=neo4j
       - NEO4J_PASSWORD=demodemo
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - MODEL_NAME=${MODEL_NAME}
+      - MODEL_NAME=${MODEL_NAME:-gpt-4o-mini}
       - PATH=/root/.local/bin:${PATH}
     ports:
       - "8000:8000" # Expose the MCP server via HTTP for SSE transport
-    command: ["uv", "run", "memory_enhanced_server.py", "--transport", "sse"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/sse --max-time 5 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    command: ["uv", "run", "server_wrapper.py"]
 
 volumes:
   neo4j_data:

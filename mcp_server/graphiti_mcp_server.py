@@ -568,9 +568,15 @@ async def initialize_graphiti():
             # If custom entities are enabled, we must have an LLM client
             raise ValueError('OPENAI_API_KEY must be set when custom entities are enabled')
 
+        # Log Neo4j configuration for debugging
+        logger.info(f'Neo4j URI: {config.neo4j.uri}')
+        logger.info(f'Neo4j User: {config.neo4j.user}')
+
         # Validate Neo4j configuration
         if not config.neo4j.uri or not config.neo4j.user or not config.neo4j.password:
-            raise ValueError('NEO4J_URI, NEO4J_USER, and NEO4J_PASSWORD must be set')
+            raise ValueError(
+                'NEO4J_URI, NEO4J_USER, and NEO4J_PASSWORD must be set'
+            )
 
         embedder_client = config.embedder.create_client()
         cross_encoder_client = config.llm.create_cross_encoder_client()
