@@ -518,13 +518,13 @@ GRAPHITI_MCP_INSTRUCTIONS = """
 Graphiti is a memory service for AI agents built on a knowledge graph. Graphiti performs well
 with dynamic data such as user interactions, changing enterprise data, and external information.
 
-Graphiti transforms information into a richly connected knowledge network, allowing you to 
-capture relationships between concepts, entities, and information. The system organizes data as episodes 
-(content snippets), nodes (entities), and facts (relationships between entities), creating a dynamic, 
-queryable memory store that evolves with new information. Graphiti supports multiple data formats, including 
+Graphiti transforms information into a richly connected knowledge network, allowing you to
+capture relationships between concepts, entities, and information. The system organizes data as episodes
+(content snippets), nodes (entities), and facts (relationships between entities), creating a dynamic,
+queryable memory store that evolves with new information. Graphiti supports multiple data formats, including
 structured JSON data, enabling seamless integration with existing data pipelines and systems.
 
-Facts contain temporal metadata, allowing you to track the time of creation and whether a fact is invalid 
+Facts contain temporal metadata, allowing you to track the time of creation and whether a fact is invalid
 (superseded by new information).
 
 Key capabilities:
@@ -534,13 +534,13 @@ Key capabilities:
 4. Retrieve specific entity edges or episodes by UUID
 5. Manage the knowledge graph with tools like delete_episode, delete_entity_edge, and clear_graph
 
-The server connects to a database for persistent storage and uses language models for certain operations. 
+The server connects to a database for persistent storage and uses language models for certain operations.
 Each piece of information is organized by group_id, allowing you to maintain separate knowledge domains.
 
-When adding information, provide descriptive names and detailed content to improve search quality. 
+When adding information, provide descriptive names and detailed content to improve search quality.
 When searching, use specific queries and consider filtering by group_id for more relevant results.
 
-For optimal performance, ensure the database is properly configured and accessible, and valid 
+For optimal performance, ensure the database is properly configured and accessible, and valid
 API keys are provided for any language model operations.
 """
 
@@ -548,7 +548,10 @@ API keys are provided for any language model operations.
 mcp = FastMCP(
     'Graphiti Agent Memory',
     instructions=GRAPHITI_MCP_INSTRUCTIONS,
+    host="0.0.0.0",
+    port=8000,
 )
+
 
 # Initialize Graphiti client
 graphiti_client: Graphiti | None = None
@@ -1201,9 +1204,9 @@ async def run_mcp_server():
     if mcp_config.transport == 'stdio':
         await mcp.run_stdio_async()
     elif mcp_config.transport == 'sse':
-        logger.info(
-            f'Running MCP server with SSE transport on {mcp.settings.host}:{mcp.settings.port}'
-        )
+        logger.info('Running MCP server with SSE transport on 0.0.0.0:8000')
+
+        # Use FastMCP's built-in SSE method (host and port configured in constructor)
         await mcp.run_sse_async()
 
 
